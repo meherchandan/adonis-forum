@@ -1,0 +1,28 @@
+<article class="media">
+    <div class="media-left">
+        <p class="image is-48x48">
+        <img src="{{post.user.avatar}}" alt="{{post.user.username}}">
+        </p>
+    </div> 
+    <div class="media-content">
+        <div class="content">
+            <h4> 
+            <a href="{{route('posts.show',{slug:post.slug})}}">{{post.title}}</a>
+                <span class="tag" >{{post.tag.name}}</span>
+            </h4>
+            <p>
+                @if(post.replies.length)
+                  {{post.lastReply.user.username }} replied {{post.last_reply_at}}
+                @else
+                
+                  <strong>{{post.user.username}} </strong> posted {{post.created_at}}
+               @endif
+            </p>
+        </div>
+    </div>
+    <div class="media-right">
+         <span class="has-text-grey-light">
+             {{post.replies.length}} {{pluralize('reply',post.replies.length)}}
+         </span>
+    </div>
+</article> 

@@ -1,0 +1,26 @@
+<nav class="navbar sub-nav is-white">
+    <div class="container">
+        <div class="navbar-menu">
+            <div class="navbar-start">
+            <a class="navbar-item {{request.match(['/'])?' is-active':''}}" href="{{route('home')}}">
+                    Recent
+                </a>
+            <a class="navbar-item {{request.match(['/posts/unanswered'])?' is-active':''}}" href="{{route('post.unanswered')}}">
+                    Unanswered
+                </a>
+                @loggedIn
+            <a class="navbar-item {{request.match(['/posts/own'])?' is-active':''}}" href="{{route('post.own')}}">
+                    Your posts
+                </a>
+                @endloggedIn
+            </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <form action="" method="GET">
+                        <input class="input" name="q" type="text" placeholder="search the forum">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

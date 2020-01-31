@@ -1,0 +1,66 @@
+@layout('layouts/default')
+
+@section('content')
+<div class="box">
+    <div class="section">
+    <h4 class="subtitle is-4"> {{post.title}}
+        <span class="tag">{{post.tag.name}}</span>
+    </h4>
+    <article class="media">
+        <div class="media-left">
+            <p class="image is-48x48">
+            <img src={{post.user.avatar}} alt ={{post.user.avatar}}>
+            </p> 
+        </div>
+        <div class="media-content">
+             <div class="content">
+                 <strong>{{post.user.username}}</strong>
+                 <p>{{post.body}}</p>
+                 <small>{{post.created_at}}</small>
+             </div>
+             @each(reply in post.replies)
+             <article class="media">
+                <div class="media-left">
+                    <p class="image is-48x48">
+                    <img src={{reply.user.avatar}} alt ={{reply.user.avatar}}>
+                    </p> 
+                </div>
+                <div class="media-content">
+                     <div class="content">
+                         <strong>{{reply.user.username}}</strong>
+                         <p>{{reply.body}}</p>
+                         <small>{{reply.created_at}}</small>
+                     </div>
+                </div>
+            </article>
+             @endeach
+        </div>
+        <div class="media-right">
+            <span class="has-text-grey-light">
+                {{post.replies.length}} {{pluralize('reply',post.replies.length)}}
+            </span>
+       </div>
+    </article>
+    </div>
+    <div class="section">
+        @loggedIn
+    <form action="{{route('posts.reply.store',{slug:post.slug})}}" method="POST">
+        {{ csrfField() }}
+        <div class="field">
+            <div class="control">
+                <label class="label">Reply</label>
+            <textarea name="body" class="textarea{{hasErrorFor('body')?' is-danger':''}}">
+                {{old('body','')}}
+            </textarea>
+            @if(hasErrorFor('body'))
+            <p class="help is-danger">{{getErrorFor('body')}}</p>
+            @endif
+            </div>
+        </div>
+        <button class="button is-info">Reply</button>
+    </form>
+    @endloggedIn
+    </div>
+</div>
+
+@endsection
