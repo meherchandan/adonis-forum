@@ -13,61 +13,78 @@
             </p> 
         </div>
         <div class="media-content">
-             <div class="content">
-                 <strong>{{post.user.username}}</strong>
-                 <p>{{post.body}}</p>
-                 <small>{{post.created_at}}</small>
-             </div>
-             @if(post.answer)
-             <div class="message is-info">
-                 <div class="message-header">
-                     Best Answer
-                 </div>
-                <div class="message-body">
-                <article class="media">
-                    <div class="media-left">
-                        <p class="image is-48x48">
-                        <img src={{post.answer.user.avatar}} alt ={{post.answer.user.avatar}}>
-                        </p> 
-                    </div>
-                    <div class="media-content">
-                         <div class="content">
-                             <strong>{{post.answer.user.username}}</strong>
-                             <p>{{post.answer.body}}</p>
-                             <small>{{post.answer.created_at}}</small>
-                         </div>
-                    </div>
-                </article>
+            <div class="content">
+                <strong>{{post.user.username}}</strong>
+                <p>{{post.body}}</p>
+                <small>{{post.created_at}}</small>
             </div>
-             </div>
-             @endif
-             @each(reply in post.replies)
-             <article class="media">
+            @if(post.answer)
+            <div class="message is-info">
+                <div class="message-header is-flex">
+                    Best Answer
+                    @if(auth.user && auth.user.id ==post.user_id)
+                    <a href="#" onclick="event.preventDefault(); document.getElementById('destroy').submit()">Remove best answer</a>
+                    @endif
+                </div>
+                <div class="message-body">
+                    <article class="media">
+                        <div class="media-left">
+                            <p class="image is-48x48">
+                            <img src={{post.answer.user.avatar}} alt ={{post.answer.user.avatar}}>
+                            </p> 
+                        </div>
+                        <div class="media-content">
+                            <div class="content">
+                                <strong>{{post.answer.user.username}}</strong>
+                                <p>{{post.answer.body}}</p>
+                                <small>{{post.answer.created_at}}</small>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        <form action="{{route('posts.answer.destroy',{slug:post.slug })}}?_method=DELETE" 
+        method="POST" id="destroy">
+                {{ csrfField() }}
+
+            </form>
+            @endif
+            @each(reply in post.replies)
+            <article class="media">
                 <div class="media-left">
                     <p class="image is-48x48">
                     <img src={{reply.user.avatar}} alt ={{reply.user.avatar}}>
                     </p> 
                 </div>
                 <div class="media-content">
-                     <div class="content">
-                         <strong>{{reply.user.username}}</strong>
-                         <p>{{reply.body}}</p>
-                         <small>
-                             @if(auth.user && auth.user.id ==post.user_id)
-                             <a href=""> Mark as best answer</a>
-                             @endif
-                             {{reply.created_at}}
-                        </small>
-                     </div>
+                    <div class="content">
+                        <strong>{{reply.user.username}}</strong>
+                        <p>{{reply.body}}</p>
+                        <small>
+                            @if(auth.user && auth.user.id ==post.user_id)
+                            <a href="#" onclick="event.preventDefault(); 
+                            document.getElementById('answer={{reply.id}}').submit()">
+                            Mark as best answer
+                            </a>
+                            @endif
+                            {{reply.created_at}}
+                    </small>
+                    </div>
                 </div>
             </article>
-             @endeach
+            @endeach
+            @each(reply in post.replies)
+                <form action ="{{route('posts.answer.store',{slug:post.slug})}}" method="POST" id="answer={{reply.id}}">
+                {{ csrfField() }}
+                <input type="hidden" name="answer_id" value="{{reply.id}}">
+                </form>
+            @endeach
         </div>
         <div class="media-right">
             <span class="has-text-grey-light">
                 {{post.replies.length}} {{pluralize('reply',post.replies.length)}}
             </span>
-       </div>
+        </div>
     </article>
     </div>
     <div class="section">

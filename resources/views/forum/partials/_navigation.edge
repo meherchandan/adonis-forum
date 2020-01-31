@@ -16,8 +16,8 @@
             </div>
             <div class="navbar-end">
                 <div class="navbar-item">
-                    <form action="" method="GET">
-                        <input class="input" name="q" type="text" placeholder="search the forum">
+                <form action="{{route('search')}}" method="GET">
+                        <input class="input" name="q" type="text" placeholder="search the forum" value={{request.input('q','')}}>
                     </form>
                 </div>
             </div>

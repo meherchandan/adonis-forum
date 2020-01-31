@@ -18,6 +18,16 @@ const Route = use('Route')
 
 Route.get('/','HomeController.index').as('home')
 
+Route.get('/search','SearchController.index').as('search')
+
+Route.post('/posts/:slug/answer','PostAnswerController.store')
+    .as('posts.answer.store')
+    .middleware(['auth'])
+
+Route.delete('/posts/:slug/answer','PostAnswerController.destroy')
+    .as('posts.answer.destroy')
+    .middleware(['auth'])
+
 Route.post('/posts/:slug/reply','PostReplyController.store')
     .as('posts.reply.store')
     .middleware(['auth'])
@@ -58,3 +68,7 @@ Route.get('/auth/login','Auth/LoginController.index')
 Route.post('/auth/login','Auth/LoginController.login')
     .as('auth.login')
     .middleware(['guest'])
+
+    Route.post('/auth/logout','Auth/LoginController.logout')
+    .as('auth.logout')
+    .middleware(['auth'])
