@@ -18,6 +18,29 @@
                  <p>{{post.body}}</p>
                  <small>{{post.created_at}}</small>
              </div>
+             @if(post.answer)
+             <div class="message is-info">
+                 <div class="message-header">
+                     Best Answer
+                 </div>
+                <div class="message-body">
+                <article class="media">
+                    <div class="media-left">
+                        <p class="image is-48x48">
+                        <img src={{post.answer.user.avatar}} alt ={{post.answer.user.avatar}}>
+                        </p> 
+                    </div>
+                    <div class="media-content">
+                         <div class="content">
+                             <strong>{{post.answer.user.username}}</strong>
+                             <p>{{post.answer.body}}</p>
+                             <small>{{post.answer.created_at}}</small>
+                         </div>
+                    </div>
+                </article>
+            </div>
+             </div>
+             @endif
              @each(reply in post.replies)
              <article class="media">
                 <div class="media-left">
@@ -29,7 +52,12 @@
                      <div class="content">
                          <strong>{{reply.user.username}}</strong>
                          <p>{{reply.body}}</p>
-                         <small>{{reply.created_at}}</small>
+                         <small>
+                             @if(auth.user && auth.user.id ==post.user_id)
+                             <a href=""> Mark as best answer</a>
+                             @endif
+                             {{reply.created_at}}
+                        </small>
                      </div>
                 </div>
             </article>
